@@ -24,11 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # enablement turns Pages on the first time this runs, so there is
-      # nothing to click in Settings
+      # Pages must already be switched on for the repo (Settings -> Pages ->
+      # Source: GitHub Actions). The `enablement: true` option can't do it
+      # here — creating a Pages site needs a token with more rights than the
+      # workflow's GITHUB_TOKEN has.
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       # the app is plain HTML/CSS/JS — no build step
       - uses: actions/upload-pages-artifact@v3

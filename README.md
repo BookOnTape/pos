@@ -57,10 +57,19 @@ Orders and settings are saved in the browser, so closing the tab doesn't lose th
 ## Hosting
 
 Pushing to `main` deploys to GitHub Pages via
-[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). One-time setup:
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 
-1. Repo **Settings → Pages → Build and deployment → Source: GitHub Actions**
-2. Push to `main`. The URL appears in the Actions run and under Settings → Pages.
+**One-time setup, and it has to be done by hand:** repo **Settings → Pages →
+Build and deployment → Source: GitHub Actions**. A workflow can't switch Pages
+on for you — the create-a-Pages-site API rejects the `GITHUB_TOKEN` that Actions
+hands the job, so the deploy fails with `Resource not accessible by integration`
+until this is set.
+
+While the repo is **private**, Pages needs a paid plan (Pro/Team/Enterprise).
+On the free plan, make the repo public first — there's nothing private in here.
+
+Then re-run the deploy: **Actions → Deploy to GitHub Pages → Run workflow**, or
+just push to `main`. The URL shows up in the run summary and under Settings → Pages.
 
 It's a static site — no server, no accounts, no data leaves the device.
 
