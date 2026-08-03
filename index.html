@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<title>Sunny Morning · Kid POS</title>
+<meta name="description" content="A pretend coffee & breakfast point-of-sale register for kids learning to read." />
+<meta name="theme-color" content="#f7f2ea" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;1000&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ============================ REGISTER ============================ -->
+<div id="register" class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">☕</span>
+      <span class="brand-text">
+        <strong>Sunny Morning</strong>
+        <small>Coffee &amp; Breakfast</small>
+      </span>
+    </div>
+
+    <div class="topbar-actions">
+      <button class="chip" id="btn-speak" aria-pressed="true" title="Read the buttons out loud">
+        <span class="chip-emoji">🔊</span><span class="chip-label">Read to Me</span>
+      </button>
+      <button class="chip" id="btn-orders" title="See the orders">
+        <span class="chip-emoji">🧾</span><span class="chip-label">Orders</span>
+        <span class="chip-count" id="orders-count" hidden>0</span>
+      </button>
+      <button class="chip" id="btn-settings" title="Grown-up settings" aria-label="Grown-up settings">
+        <span class="chip-emoji">⚙️</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="cats" id="cats" aria-label="Menu categories"></nav>
+
+  <main class="menu" id="menu" aria-label="Menu items"></main>
+
+  <!-- ------------------------- CART ------------------------- -->
+  <aside class="cart" id="cart">
+    <div class="cart-head">
+      <h2>Order</h2>
+      <button class="ghost-btn" id="btn-clear" hidden>Start Over</button>
+    </div>
+    <div class="cart-lines" id="cart-lines"></div>
+    <div class="cart-foot">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cart-total">$0.00</strong>
+      </div>
+      <button class="big-btn pay-btn" id="btn-pay" disabled>
+        <span class="big-btn-emoji">💳</span>
+        <span>Pay</span>
+      </button>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ============================ OVERLAYS ============================ -->
+<div class="overlay" id="overlay" hidden></div>
+<div class="sheet-host" id="sheet-host" hidden></div>
+
+<!-- floating cart button for phones -->
+<button class="fab" id="fab" hidden>
+  <span class="fab-emoji">🧺</span>
+  <span class="fab-count" id="fab-count">0</span>
+  <span class="fab-total">$0.00</span>
+</button>
+
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
