@@ -24,7 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # enablement turns Pages on the first time this runs, so there is
+      # nothing to click in Settings
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       # the app is plain HTML/CSS/JS — no build step
       - uses: actions/upload-pages-artifact@v3
