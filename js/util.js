@@ -88,17 +88,64 @@ export const setSpeech = (on) => {
 };
 
 let voice = null;
-function pickVoice() {
-  if (!window.speechSynthesis) return null;
-  const voices = speechSynthesis.getVoices();
-  if (!voices.length) return null;
-  const en = voices.filter((v) => /^en/i.test(v.lang));
-  const nice = en.find((v) => /samantha|karen|moira|google us english|zira|aria|jenny/i.test(v.name));
-  return nice || en[0] || voices[0];
+let wantedVoiceURI = null;
+let rate = 0.92;
+const voiceListeners = new Set();
+
+/* Voices the device actually has. Quality varies a lot between them —
+   the "enhanced"/"premium" ones a device downloads sound far more human
+   than the default, so they're floated to the top of the list. */
+export function englishVoices() {
+  if (!window.speechSynthesis) return [];
+  return speechSynthesis.getVoices()
+    .filter((v) => /^en/i.test(v.lang))
+    .sort((a, b) => quality(b) - quality(a) || a.name.localeCompare(b.name));
 }
+
+function quality(v) {
+  let score = 0;
+  if (/enhanced|premium|neural|natural/i.test(v.name)) score += 10;
+  // named voices are generally the good ones; "Google UK English Female" etc.
+  if (/samantha|ava|allison|susan|tom|alex|karen|moira|siri|jenny|aria|guy/i.test(v.name)) score += 5;
+  if (/google/i.test(v.name)) score += 3;
+  if (/^en-US/i.test(v.lang)) score += 2;
+  if (/compact|eloquence|espeak/i.test(v.name)) score -= 8;
+  return score;
+}
+
+function resolveVoice() {
+  const list = englishVoices();
+  if (!list.length) return null;
+  if (wantedVoiceURI) {
+    const match = list.find((v) => v.voiceURI === wantedVoiceURI);
+    if (match) return match;
+  }
+  return list[0];
+}
+
 if (window.speechSynthesis) {
-  voice = pickVoice();
-  speechSynthesis.addEventListener?.('voiceschanged', () => { voice = pickVoice(); });
+  voice = resolveVoice();
+  speechSynthesis.addEventListener?.('voiceschanged', () => {
+    voice = resolveVoice();
+    for (const cb of voiceListeners) cb(englishVoices());
+  });
+}
+
+/** Run cb whenever the device's voice list changes (it loads async). */
+export function onVoicesReady(cb) {
+  voiceListeners.add(cb);
+  return () => voiceListeners.delete(cb);
+}
+
+export function setVoice(uri) {
+  wantedVoiceURI = uri || null;
+  voice = resolveVoice();
+}
+
+export const currentVoiceURI = () => (voice ? voice.voiceURI : null);
+
+export function setRate(r) {
+  rate = Math.min(1.4, Math.max(0.5, Number(r) || 0.92));
 }
 
 export function say(text, { now = true } = {}) {
@@ -106,7 +153,7 @@ export function say(text, { now = true } = {}) {
   try {
     if (now) speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(String(text));
-    u.rate = 0.92;
+    u.rate = rate;
     u.pitch = 1.05;
     if (voice) u.voice = voice;
     speechSynthesis.speak(u);

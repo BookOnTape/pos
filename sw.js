@@ -1,5 +1,6 @@
 /* Keeps the register working with no wifi — handy on a tablet in the car. */
-const CACHE = 'sunny-pos-v1';
+/* bump this whenever the app files change so installed tablets refresh */
+const CACHE = 'sunny-pos-v2';
 
 const SHELL = [
   './',

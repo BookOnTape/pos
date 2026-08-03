@@ -146,6 +146,11 @@ h1, h2, h3, p { margin: 0; }
 }
 .cats::-webkit-scrollbar { display: none; }
 
+/* on a tablet, wrap so every category is visible without scrolling */
+@media (min-width: 640px) {
+  .cats { flex-wrap: wrap; overflow-x: visible; }
+}
+
 .cat {
   flex: none;
   min-height: var(--tap);
@@ -162,10 +167,14 @@ h1, h2, h3, p { margin: 0; }
 .cat .e { font-size: 26px; }
 .cat[aria-selected="true"] { border-color: var(--tint, var(--caramel)); background: var(--tint-soft, var(--cream)); box-shadow: var(--shadow-2); }
 
-.cat-coffee { --tint: #8a5a33; --tint-soft: #f1e2d2; }
-.cat-tea    { --tint: #4f9d7d; --tint-soft: #dff0e7; }
-.cat-cold   { --tint: #4a86c4; --tint-soft: #dcebf8; }
-.cat-food   { --tint: #d9822b; --tint-soft: #fbe8d2; }
+.cat-coffee    { --tint: #8a5a33; --tint-soft: #f1e2d2; }
+.cat-tea       { --tint: #4f9d7d; --tint-soft: #dff0e7; }
+.cat-cold      { --tint: #4a86c4; --tint-soft: #dcebf8; }
+.cat-breakfast { --tint: #d9822b; --tint-soft: #fbe8d2; }
+.cat-lunch     { --tint: #c2543f; --tint-soft: #fadfd9; }
+.cat-dinner    { --tint: #7a5aa8; --tint-soft: #e8dff5; }
+.cat-sides     { --tint: #b08a1e; --tint-soft: #f7ecc9; }
+.cat-sweets    { --tint: #c2557f; --tint-soft: #fadfea; }
 
 /* ----------------------------- MENU ----------------------------- */
 .menu {
@@ -199,10 +208,14 @@ h1, h2, h3, p { margin: 0; }
   background: var(--tint, var(--espresso));
   padding: 3px 12px; border-radius: 999px;
 }
-.tile.cat-coffee { border-color: #e3d3c1; }
-.tile.cat-tea    { border-color: #cfe6da; }
-.tile.cat-cold   { border-color: #cfe0ef; }
-.tile.cat-food   { border-color: #f2ddc2; }
+.tile.cat-coffee    { border-color: #e3d3c1; }
+.tile.cat-tea       { border-color: #cfe6da; }
+.tile.cat-cold      { border-color: #cfe0ef; }
+.tile.cat-breakfast { border-color: #f2ddc2; }
+.tile.cat-lunch     { border-color: #f0cdc4; }
+.tile.cat-dinner    { border-color: #ddd0ee; }
+.tile.cat-sides     { border-color: #ecdfb4; }
+.tile.cat-sweets    { border-color: #f2cfdf; }
 
 /* ----------------------------- CART ----------------------------- */
 .cart {
@@ -256,12 +269,12 @@ h1, h2, h3, p { margin: 0; }
 .line-price { font-size: 16px; font-weight: 900; }
 .line-qty { display: flex; align-items: center; gap: 6px; }
 .qty-btn {
-  width: 34px; height: 34px; border-radius: 12px;
+  width: 40px; height: 40px; border-radius: 12px;
   background: var(--panel); border: 2px solid var(--line-strong);
   display: grid; place-items: center; font-size: 18px; font-weight: 900;
 }
 .qty-btn:active { transform: scale(.9); }
-.qty-n { min-width: 22px; text-align: center; font-size: 17px; font-weight: 900; }
+.qty-btn.remove { color: var(--berry); border-color: #e8c4cd; background: #fdf4f6; }
 
 .cart-foot {
   border-top: 2px solid var(--line);
@@ -574,6 +587,49 @@ h1, h2, h3, p { margin: 0; }
 }
 .toggle[aria-pressed="true"] { background: var(--ok); }
 .toggle[aria-pressed="true"]::after { transform: translateX(28px); }
+
+/* ---- voice picker ---- */
+.set-block {
+  padding: 14px; border-radius: var(--r);
+  border: 2px solid var(--line); background: var(--panel-2);
+  margin-bottom: 10px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.set-block-head b { display: block; font-size: 17px; }
+.set-block-head small { color: var(--ink-soft); font-size: 13px; font-weight: 700; }
+
+.select {
+  width: 100%; min-height: 56px;
+  padding: 0 14px;
+  border-radius: var(--r-sm);
+  border: 2px solid var(--line-strong);
+  background: var(--panel);
+  font-family: inherit; font-size: 16px; font-weight: 800; color: var(--ink);
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-soft) 50%),
+                    linear-gradient(135deg, var(--ink-soft) 50%, transparent 50%);
+  background-position: right 20px center, right 14px center;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+.seg { display: flex; gap: 8px; }
+.seg-btn {
+  flex: 1; min-height: 52px;
+  border-radius: var(--r-sm);
+  border: 2px solid var(--line-strong);
+  background: var(--panel);
+  font-size: 16px; font-weight: 900;
+}
+.seg-btn:active { transform: scale(.96); }
+.seg-btn[aria-pressed="true"] { background: var(--cream); border-color: var(--caramel); }
+
+.ghost-btn.wide { width: 100%; min-height: 52px; font-size: 16px; }
+
+.set-note {
+  font-size: 13px; font-weight: 700; line-height: 1.45;
+  color: var(--ink-soft); margin: 0;
+}
 
 /* ---------------------------- CONFETTI ---------------------------- */
 .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 80; overflow: hidden; }
