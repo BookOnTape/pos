@@ -1,12 +1,12 @@
 {
-  "name": "Sunny Morning — Coffee & Breakfast POS",
+  "name": "Sunny Morning — All-Day Diner POS",
   "short_name": "Sunny POS",
-  "description": "A pretend coffee shop register for kids who are learning to read.",
+  "description": "A pretend all-day diner register for kids who are learning to read.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4efe6",
-  "theme_color": "#f7f2ea",
+  "background_color": "#f7f5f2",
+  "theme_color": "#ffffff",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
