@@ -554,15 +554,23 @@ h1, h2, h3, p { margin: 0; }
   color: var(--ink);
 }
 .name-display:empty::before { content: 'Type a name'; color: var(--ink-faint); font-size: 20px; }
-.keys { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
+/* QWERTY, staggered like a real keyboard */
+.keys { display: flex; flex-direction: column; gap: 7px; }
+.keyrow {
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  gap: 7px;
+}
+.keyrow[data-row="1"] { padding: 0 5%; }   /* half-key indent */
+.keyrow[data-row="2"] { padding: 0 15%; }
 .key {
-  min-height: 54px; border-radius: 14px;
+  min-height: 56px; border-radius: 14px;
   background: var(--panel-2); border: 2px solid var(--line);
   font-size: 21px; font-weight: 1000;
   box-shadow: var(--shadow-1);
 }
 .key:active { transform: scale(.92); }
-.key.wide { grid-column: span 2; font-size: 17px; }
+.keyrow.actions .key { font-size: 17px; }
 .name-skip { text-align: center; margin-top: 12px; }
 
 /* ---------------------------- SETTINGS ---------------------------- */
@@ -660,7 +668,6 @@ h1, h2, h3, p { margin: 0; }
   body.cart-open .cart { transform: translateY(0); }
   .menu { padding-bottom: 108px; }
   .money-grid { grid-template-columns: repeat(2, 1fr); }
-  .keys { grid-template-columns: repeat(6, 1fr); }
   .brand-text small { display: none; }
   .chip-label { display: none; }
   .chip { padding: 0 14px; }

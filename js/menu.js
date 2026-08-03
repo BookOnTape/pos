@@ -36,14 +36,14 @@ export const TEMPS = {
 };
 
 const SIZES = [
-  { id: 'small', name: 'Small', emoji: '🥃', price: 0, note: '8 oz' },
+  { id: 'small', name: 'Small', emoji: '🥛', price: 0, note: '8 oz' },
   { id: 'medium', name: 'Medium', emoji: '🥤', price: 50, note: '12 oz' },
   { id: 'large', name: 'Large', emoji: '🪣', price: 100, note: '16 oz' },
 ];
 
 const MILKS = [
   { id: 'whole', name: 'Whole Milk', emoji: '🥛', price: 0 },
-  { id: 'two', name: '2% Milk', emoji: '🥛', price: 0 },
+  { id: 'two', name: '2% Milk', emoji: '2️⃣', price: 0 },
   { id: 'oat', name: 'Oat Milk', emoji: '🌾', price: 50 },
   { id: 'almond', name: 'Almond Milk', emoji: '🌰', price: 50 },
   { id: 'soy', name: 'Soy Milk', emoji: '🌱', price: 50 },
@@ -71,7 +71,7 @@ const FRUIT_SYRUPS = [
 
 const SWEETENERS = [
   { id: 'nosugar', name: 'No Sugar', emoji: '🚫', price: 0 },
-  { id: 'sugar', name: 'Sugar', emoji: '🍚', price: 0 },
+  { id: 'sugar', name: 'Sugar', emoji: '🤍', price: 0 },
   { id: 'brownsugar', name: 'Brown Sugar', emoji: '🟫', price: 0 },
   { id: 'honey', name: 'Honey', emoji: '🍯', price: 0 },
   { id: 'sweetener', name: 'Sweetener', emoji: '💙', price: 0 },
@@ -99,10 +99,29 @@ const CUP_EXTRAS = [
   { id: 'lemon', name: 'Lemon Slice', emoji: '🍋', price: 0 },
 ];
 
+const MUFFIN_FLAVORS = [
+  { id: 'mblueberry', name: 'Blueberry', emoji: '🫐', price: 0 },
+  { id: 'mchocchip', name: 'Chocolate Chip', emoji: '🍫', price: 0 },
+  { id: 'mbanana', name: 'Banana Nut', emoji: '🍌', price: 0 },
+  { id: 'mcorn', name: 'Corn', emoji: '🌽', price: 0 },
+  { id: 'mlemon', name: 'Lemon Poppy', emoji: '🍋', price: 0 },
+  { id: 'mapple', name: 'Apple Cinnamon', emoji: '🍎', price: 0 },
+];
+
+const BAGEL_FLAVORS = [
+  { id: 'bplain', name: 'Plain', emoji: '🥯', price: 0 },
+  { id: 'beverything', name: 'Everything', emoji: '✨', price: 0 },
+  { id: 'bsesame', name: 'Sesame', emoji: '⚪', price: 0 },
+  { id: 'bpoppy', name: 'Poppy Seed', emoji: '⚫', price: 0 },
+  { id: 'bcinnamon', name: 'Cinnamon Raisin', emoji: '🍇', price: 0 },
+  { id: 'bonion', name: 'Onion', emoji: '🧅', price: 0 },
+  { id: 'bblueberry', name: 'Blueberry', emoji: '🫐', price: 0 },
+];
+
 const SPREADS = [
   { id: 'butter', name: 'Butter', emoji: '🧈', price: 0 },
   { id: 'jam', name: 'Jam', emoji: '🍓', price: 50 },
-  { id: 'creamcheese', name: 'Cream Cheese', emoji: '🧀', price: 50 },
+  { id: 'creamcheese', name: 'Cream Cheese', emoji: '🤍', price: 50 },
   { id: 'peanutbutter', name: 'Peanut Butter', emoji: '🥜', price: 50 },
   { id: 'nospread', name: 'Nothing', emoji: '🚫', price: 0 },
 ];
@@ -118,20 +137,20 @@ const BREADS = [
   { id: 'white', name: 'White Bread', emoji: '🍞', price: 0 },
   { id: 'wheat', name: 'Wheat Bread', emoji: '🌾', price: 0 },
   { id: 'sourdough', name: 'Sourdough', emoji: '🥖', price: 0 },
-  { id: 'rye', name: 'Rye', emoji: '🍞', price: 0 },
+  { id: 'rye', name: 'Rye', emoji: '🟫', price: 0 },
   { id: 'bun', name: 'Soft Bun', emoji: '🥯', price: 0 },
   { id: 'wrap', name: 'Wrap', emoji: '🌯', price: 0 },
 ];
 
 const TOASTED = [
   { id: 'toasted', name: 'Toasted', emoji: '🔥', price: 0 },
-  { id: 'nottoasted', name: 'Not Toasted', emoji: '❄️', price: 0 },
+  { id: 'nottoasted', name: 'Not Toasted', emoji: '🍞', price: 0 },
 ];
 
 const CHEESES = [
-  { id: 'american', name: 'American', emoji: '🧀', price: 0 },
+  { id: 'american', name: 'American', emoji: '🟨', price: 0 },
   { id: 'cheddar', name: 'Cheddar', emoji: '🧀', price: 0 },
-  { id: 'swiss', name: 'Swiss', emoji: '🧀', price: 0 },
+  { id: 'swiss', name: 'Swiss', emoji: '⬜', price: 0 },
   { id: 'pepperjack', name: 'Pepper Jack', emoji: '🌶️', price: 0 },
   { id: 'nocheese', name: 'No Cheese', emoji: '🚫', price: 0 },
 ];
@@ -146,17 +165,17 @@ const FIXINGS = [
 ];
 
 const SAUCES = [
-  { id: 'mayo', name: 'Mayo', emoji: '🥚', price: 0 },
+  { id: 'mayo', name: 'Mayo', emoji: '🤍', price: 0 },
   { id: 'mustard', name: 'Mustard', emoji: '💛', price: 0 },
-  { id: 'ketchup', name: 'Ketchup', emoji: '🍅', price: 0 },
-  { id: 'ranch', name: 'Ranch', emoji: '🤍', price: 0 },
+  { id: 'ketchup', name: 'Ketchup', emoji: '🔴', price: 0 },
+  { id: 'ranch', name: 'Ranch', emoji: '🥛', price: 0 },
   { id: 'bbq', name: 'BBQ Sauce', emoji: '🟤', price: 0 },
   { id: 'nosauce', name: 'No Sauce', emoji: '🚫', price: 0 },
 ];
 
 const SIDE_CHOICES = [
   { id: 'sfries', name: 'Fries', emoji: '🍟', price: 0 },
-  { id: 'schips', name: 'Chips', emoji: '🥔', price: 0 },
+  { id: 'schips', name: 'Chips', emoji: '🍘', price: 0 },
   { id: 'sfruit', name: 'Fruit', emoji: '🍇', price: 0 },
   { id: 'ssalad', name: 'Side Salad', emoji: '🥗', price: 0 },
   { id: 'sslaw', name: 'Coleslaw', emoji: '🥬', price: 0 },
@@ -166,15 +185,15 @@ const SIDE_CHOICES = [
 ];
 
 const COOKED = [
-  { id: 'light', name: 'A Little Pink', emoji: '🌸', price: 0 },
+  { id: 'light', name: 'A Little Pink', emoji: '🔴', price: 0 },
   { id: 'medium', name: 'In the Middle', emoji: '🟠', price: 0 },
   { id: 'welldone', name: 'Well Done', emoji: '🟤', price: 0 },
 ];
 
 const EGG_STYLES = [
-  { id: 'scrambled', name: 'Scrambled', emoji: '🍳', price: 0 },
+  { id: 'scrambled', name: 'Scrambled', emoji: '🥣', price: 0 },
   { id: 'fried', name: 'Fried', emoji: '🍳', price: 0 },
-  { id: 'overeasy', name: 'Over Easy', emoji: '🥚', price: 0 },
+  { id: 'overeasy', name: 'Over Easy', emoji: '🌤️', price: 0 },
   { id: 'boiled', name: 'Hard Boiled', emoji: '🥚', price: 0 },
 ];
 
@@ -186,7 +205,7 @@ const BREAKFAST_MEATS = [
 ];
 
 const DRESSINGS = [
-  { id: 'ranchd', name: 'Ranch', emoji: '🤍', price: 0 },
+  { id: 'ranchd', name: 'Ranch', emoji: '🥛', price: 0 },
   { id: 'caesar', name: 'Caesar', emoji: '🧀', price: 0 },
   { id: 'italian', name: 'Italian', emoji: '🌿', price: 0 },
   { id: 'honeymustard', name: 'Honey Mustard', emoji: '🍯', price: 0 },
@@ -206,7 +225,7 @@ const BOWL_SIZES = [
 ];
 
 const SOUP_WITH = [
-  { id: 'crackers', name: 'Crackers', emoji: '🧂', price: 0 },
+  { id: 'crackers', name: 'Crackers', emoji: '🍘', price: 0 },
   { id: 'roll', name: 'Warm Roll', emoji: '🥖', price: 0 },
   { id: 'soupcheese', name: 'Cheese on Top', emoji: '🧀', price: 50 },
 ];
@@ -296,6 +315,8 @@ export const GROUPS = {
   },
   cupextras: { q: 'Anything else?', sub: 'Pick as many as you like', multi: true, options: CUP_EXTRAS },
 
+  muffinflavor: { q: 'Which muffin?', required: true, options: MUFFIN_FLAVORS },
+  bagelflavor: { q: 'Which bagel?', required: true, options: BAGEL_FLAVORS },
   warm: { q: 'Warm it up?', required: true, options: WARM },
   spread: { q: 'What goes on top?', required: true, options: SPREADS },
 
@@ -408,9 +429,9 @@ export const ITEMS = [
   { id: 'soda', cat: 'cold', name: 'Soda Pop', emoji: '🥤', price: 250, tpl: 'juice', temps: ['cold'] },
 
   // --------------------------- BREAKFAST ---------------------------
-  { id: 'bagel', cat: 'breakfast', name: 'Bagel', emoji: '🥯', price: 300, tpl: 'pastry' },
+  { id: 'bagel', cat: 'breakfast', name: 'Bagel', emoji: '🥯', price: 300, steps: ['bagelflavor', 'warm', 'spread'] },
   { id: 'croissant', cat: 'breakfast', name: 'Croissant', emoji: '🥐', price: 350, tpl: 'pastry' },
-  { id: 'muffin', cat: 'breakfast', name: 'Muffin', emoji: '🧁', price: 300, tpl: 'pastry', skip: ['spread'] },
+  { id: 'muffin', cat: 'breakfast', name: 'Muffin', emoji: '🧁', price: 300, steps: ['muffinflavor', 'warm'] },
   { id: 'donut', cat: 'breakfast', name: 'Donut', emoji: '🍩', price: 200, tpl: 'plainfood' },
   { id: 'toast', cat: 'breakfast', name: 'Toast', emoji: '🍞', price: 200, tpl: 'pastry' },
   { id: 'oatmeal', cat: 'breakfast', name: 'Oatmeal', emoji: '🥣', price: 400, tpl: 'plainfood' },
@@ -427,15 +448,15 @@ export const ITEMS = [
 
   // ----------------------------- LUNCH -----------------------------
   { id: 'grilledcheese', cat: 'lunch', name: 'Grilled Cheese', emoji: '🧀', price: 500, tpl: 'sandwich', skip: ['toasted', 'fixings'] },
-  { id: 'hamsand', cat: 'lunch', name: 'Ham Sandwich', emoji: '🥪', price: 600, tpl: 'sandwich' },
-  { id: 'turkeysand', cat: 'lunch', name: 'Turkey Sandwich', emoji: '🥪', price: 600, tpl: 'sandwich' },
+  { id: 'hamsand', cat: 'lunch', name: 'Ham Sandwich', emoji: '🍖', price: 600, tpl: 'sandwich' },
+  { id: 'turkeysand', cat: 'lunch', name: 'Turkey Sandwich', emoji: '🦃', price: 600, tpl: 'sandwich' },
   { id: 'tunasand', cat: 'lunch', name: 'Tuna Sandwich', emoji: '🐟', price: 600, tpl: 'sandwich' },
   { id: 'blt', cat: 'lunch', name: 'BLT', emoji: '🥓', price: 600, tpl: 'sandwich' },
   { id: 'pbj', cat: 'lunch', name: 'PB & Jelly', emoji: '🥜', price: 400, tpl: 'sandwich', skip: ['cheese', 'fixings', 'sauce', 'toasted'] },
   { id: 'club', cat: 'lunch', name: 'Club Sandwich', emoji: '🥪', price: 700, tpl: 'sandwich' },
   { id: 'hamburger', cat: 'lunch', name: 'Hamburger', emoji: '🍔', price: 600, tpl: 'burger', skip: ['cheese'] },
   { id: 'cheeseburger', cat: 'lunch', name: 'Cheeseburger', emoji: '🍔', price: 700, tpl: 'burger' },
-  { id: 'chickensand', cat: 'lunch', name: 'Chicken Sandwich', emoji: '🍗', price: 700, tpl: 'sandwich' },
+  { id: 'chickensand', cat: 'lunch', name: 'Chicken Sandwich', emoji: '🥙', price: 700, tpl: 'sandwich' },
   { id: 'hotdog', cat: 'lunch', name: 'Hot Dog', emoji: '🌭', price: 400, tpl: 'handheld' },
   { id: 'quesadilla', cat: 'lunch', name: 'Quesadilla', emoji: '🫓', price: 500, tpl: 'handheld' },
   { id: 'tacos', cat: 'lunch', name: 'Tacos', emoji: '🌮', price: 600, tpl: 'handheld' },
@@ -444,18 +465,18 @@ export const ITEMS = [
   { id: 'chickensoup', cat: 'lunch', name: 'Chicken Noodle Soup', emoji: '🍜', price: 400, tpl: 'soup' },
   { id: 'tomatosoup', cat: 'lunch', name: 'Tomato Soup', emoji: '🍅', price: 400, tpl: 'soup' },
   { id: 'chili', cat: 'lunch', name: 'Chili', emoji: '🌶️', price: 500, tpl: 'soup' },
-  { id: 'macncheese', cat: 'lunch', name: 'Mac & Cheese', emoji: '🧀', price: 500, tpl: 'plate', skip: ['side2'] },
+  { id: 'macncheese', cat: 'lunch', name: 'Mac & Cheese', emoji: '🍝', price: 500, tpl: 'plate', skip: ['side2'] },
   { id: 'grilledchickensalad', cat: 'lunch', name: 'Chicken Salad', emoji: '🍗', price: 700, tpl: 'salad' },
 
   // ----------------------------- DINNER -----------------------------
   { id: 'spaghetti', cat: 'dinner', name: 'Spaghetti', emoji: '🍝', price: 800, tpl: 'pasta' },
   { id: 'meatloaf', cat: 'dinner', name: 'Meatloaf', emoji: '🍖', price: 900, tpl: 'plate' },
-  { id: 'roastchicken', cat: 'dinner', name: 'Roast Chicken', emoji: '🍗', price: 900, tpl: 'plate' },
+  { id: 'roastchicken', cat: 'dinner', name: 'Roast Chicken', emoji: '🐔', price: 900, tpl: 'plate' },
   { id: 'friedchicken', cat: 'dinner', name: 'Fried Chicken', emoji: '🍗', price: 900, tpl: 'plate' },
   { id: 'fishchips', cat: 'dinner', name: 'Fish & Chips', emoji: '🐟', price: 900, tpl: 'plate' },
   { id: 'potroast', cat: 'dinner', name: 'Pot Roast', emoji: '🥘', price: 1000, tpl: 'plate' },
   { id: 'steak', cat: 'dinner', name: 'Steak', emoji: '🥩', price: 1200, tpl: 'steakplate' },
-  { id: 'porkchop', cat: 'dinner', name: 'Pork Chop', emoji: '🍖', price: 1000, tpl: 'plate' },
+  { id: 'porkchop', cat: 'dinner', name: 'Pork Chop', emoji: '🐖', price: 1000, tpl: 'plate' },
   { id: 'turkeydinner', cat: 'dinner', name: 'Turkey Dinner', emoji: '🦃', price: 1000, tpl: 'plate' },
   { id: 'shepherds', cat: 'dinner', name: "Shepherd's Pie", emoji: '🥧', price: 900, tpl: 'plate', skip: ['side2'] },
   { id: 'salmon', cat: 'dinner', name: 'Salmon', emoji: '🐠', price: 1100, tpl: 'plate' },
@@ -472,7 +493,7 @@ export const ITEMS = [
   { id: 'corn', cat: 'sides', name: 'Corn', emoji: '🌽', price: 200, tpl: 'plainfood' },
   { id: 'greenbeans', cat: 'sides', name: 'Broccoli', emoji: '🥦', price: 200, tpl: 'plainfood' },
   { id: 'applesauce', cat: 'sides', name: 'Apple Sauce', emoji: '🍎', price: 200, tpl: 'plainfood' },
-  { id: 'chips', cat: 'sides', name: 'Chips', emoji: '🥔', price: 200, tpl: 'plainfood' },
+  { id: 'chips', cat: 'sides', name: 'Chips', emoji: '🍘', price: 200, tpl: 'plainfood' },
   { id: 'garlicbread', cat: 'sides', name: 'Garlic Bread', emoji: '🥖', price: 300, tpl: 'plainfood' },
   { id: 'pickle', cat: 'sides', name: 'Big Pickle', emoji: '🥒', price: 100, tpl: 'plainfood' },
   { id: 'cottagecheese', cat: 'sides', name: 'Cottage Cheese', emoji: '🥣', price: 200, tpl: 'plainfood' },

@@ -33,7 +33,7 @@ goes on the ticket.
 lines on the tab, not "3 ×" — so when the whole family wants a milkshake, he can
 see three milkshakes.
 
-**Ring it up.** Type the customer's name on a big ABC keyboard (or skip it),
+**Ring it up.** Type the customer's name on a big QWERTY keyboard (or skip it),
 then take **cash** or **card**.
 
 Cash is the good part: tap the bills and coins as they're handed over, watch the

@@ -425,7 +425,7 @@ function finishBuilder() {
 
 /* ============================ NAME ENTRY ============================ */
 
-const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const KEY_ROWS = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
 
 function openNameSheet() {
   state.customer = '';
@@ -433,25 +433,34 @@ function openNameSheet() {
   const display = h('div', { class: 'name-display' });
   const update = () => { display.textContent = state.customer; };
 
+  const letterKey = (L) => h('button', {
+    class: 'key',
+    onclick: () => {
+      if (state.customer.length >= 12) return;
+      state.customer += L;
+      play('tap');
+      say(L);
+      update();
+    },
+  }, L);
+
   const keys = h('div', { class: 'keys' }, [
-    ...LETTERS.map((L) => h('button', {
-      class: 'key',
-      onclick: () => {
-        if (state.customer.length >= 12) return;
-        state.customer += L;
-        play('tap');
-        say(L);
-        update();
-      },
-    }, L)),
-    h('button', {
-      class: 'key wide',
-      onclick: () => { state.customer = state.customer.slice(0, -1); play('back'); update(); },
-    }, '⌫ Back'),
-    h('button', {
-      class: 'key wide',
-      onclick: () => { if (state.customer) { state.customer += ' '; update(); } },
-    }, 'Space'),
+    ...KEY_ROWS.map((row, i) => h('div', {
+      class: 'keyrow',
+      style: `--n:${row.length}`,
+      dataset: { row: String(i) },
+    }, row.split('').map(letterKey))),
+
+    h('div', { class: 'keyrow actions', style: '--n:2' }, [
+      h('button', {
+        class: 'key',
+        onclick: () => { if (state.customer) { state.customer += ' '; update(); } },
+      }, 'Space'),
+      h('button', {
+        class: 'key',
+        onclick: () => { state.customer = state.customer.slice(0, -1); play('back'); update(); },
+      }, '⌫ Back'),
+    ]),
   ]);
 
   openSheet(sheet({
