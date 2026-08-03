@@ -5,13 +5,12 @@
    ================================================================== */
 
 import {
-  SHOP, CATEGORIES, ITEMS, TEMPS, SIZES, MILKS, FLAVORS, SWEETENERS,
-  ICE, DRINK_EXTRAS, SPREADS, WARM, FOR_HERE, MONEY,
+  SHOP, CATEGORIES, ITEMS, TEMPS, GROUPS, MONEY, stepKeysFor,
 } from './menu.js';
 
 import {
   money, moneyWords, esc, h, $, play, say, setSound, setSpeech,
-  confetti, load, save, makeChange,
+  confetti, load, save, makeChange, englishVoices, setVoice, setRate, onVoicesReady,
 } from './util.js';
 
 /* ============================== STATE ============================== */
@@ -23,7 +22,10 @@ const state = {
   cart: [],
   seq: saved.seq || 1,
   orders: saved.orders || [],
-  settings: Object.assign({ speech: true, sound: true, prices: true }, saved.settings || {}),
+  settings: Object.assign(
+    { speech: true, sound: true, prices: true, voice: null, rate: 0.92 },
+    saved.settings || {},
+  ),
   builder: null,
   pay: null,
   customer: '',
@@ -31,6 +33,8 @@ const state = {
 
 setSpeech(state.settings.speech);
 setSound(state.settings.sound);
+setVoice(state.settings.voice);
+setRate(state.settings.rate);
 
 function persist() {
   save({ seq: state.seq, orders: state.orders, settings: state.settings });
@@ -63,10 +67,15 @@ function openSheet(node, { onClose } = {}) {
   showOverlay(() => { if (onClose !== false) closeSheet(); });
 }
 
+/* the settings sheet subscribes to the device's voice list */
+let voiceUnsub = null;
+
 function closeSheet() {
   sheetHost.hidden = true;
   sheetHost.innerHTML = '';
   hideOverlay();
+  voiceUnsub?.();
+  voiceUnsub = null;
   state.builder = null;
   state.pay = null;
 }
@@ -170,17 +179,10 @@ function renderCart() {
       ]),
       h('div', { class: 'line-right' }, [
         h('div', { class: 'line-price' }, money(line.unit * line.qty)),
-        h('div', { class: 'line-qty' }, [
-          h('button', {
-            class: 'qty-btn', 'aria-label': 'One less',
-            onclick: () => changeQty(line, -1),
-          }, '−'),
-          h('span', { class: 'qty-n' }, String(line.qty)),
-          h('button', {
-            class: 'qty-btn', 'aria-label': 'One more',
-            onclick: () => changeQty(line, +1),
-          }, '+'),
-        ]),
+        h('button', {
+          class: 'qty-btn remove', 'aria-label': `Take off the ${line.name}`,
+          onclick: () => removeLine(line),
+        }, '✕'),
       ]),
     ]));
   }
@@ -195,17 +197,16 @@ function renderCart() {
   fab.hidden = !(isPhone() && state.cart.length);
 }
 
-function changeQty(line, delta) {
-  line.qty += delta;
-  play(delta > 0 ? 'add' : 'back');
-  if (line.qty <= 0) state.cart = state.cart.filter((l) => l !== line);
+function removeLine(line) {
+  state.cart = state.cart.filter((l) => l !== line);
+  play('back');
   renderCart();
 }
 
+/* Every order gets its own line, even two identical ones — so three
+   people ordering the same drink read as three drinks, not "3 ×". */
 function addToCart(line) {
-  const twin = state.cart.find((l) => l.sig === line.sig);
-  if (twin) twin.qty += 1;
-  else state.cart.push(line);
+  state.cart.push(line);
   renderCart();
 }
 
@@ -221,41 +222,38 @@ function closeCart() {
 
 /* ============================= BUILDER ============================= */
 
+/* Each item names a template in menu.js listing the questions it asks,
+   so a juice never gets offered coffee syrup. */
 function buildSteps(item) {
   const steps = [];
 
-  if (item.kind === 'drink') {
-    const temps = item.temps.map((t) => TEMPS[t]);
-    if (temps.length > 1) {
-      steps.push({ key: 'temp', q: 'Hot or Cold?', options: temps, required: true });
-    }
-    steps.push({ key: 'size', q: 'What size?', options: SIZES, required: true });
-    if (item.milk) {
-      steps.push({ key: 'milk', q: 'Which milk?', options: MILKS, required: true });
-    }
-    steps.push({ key: 'flavor', q: 'Add a flavor?', sub: 'Pick as many as you like', options: FLAVORS, multi: true });
-    steps.push({ key: 'sweet', q: 'Something sweet?', options: SWEETENERS });
+  for (const key of stepKeysFor(item)) {
+    const group = GROUPS[key];
+    if (!group) continue;
+
+    const options = typeof group.options === 'function' ? group.options(item) : group.options;
+    if (!options || !options.length) continue;
+    // one temperature means there's nothing to ask — it gets preselected
+    if (key === 'temp' && options.length < 2) continue;
+
     steps.push({
-      key: 'ice', q: 'How much ice?', options: ICE, required: true,
-      when: (sel) => sel.temp && sel.temp.id !== 'hot',
+      key,
+      q: group.q,
+      sub: group.sub,
+      multi: group.multi,
+      required: group.required,
+      when: group.when,
+      options,
     });
-    steps.push({
-      key: 'extras', q: 'Anything extra?', sub: 'Pick as many as you like', multi: true,
-      options: DRINK_EXTRAS.filter((e) => !e.needs || item[e.needs]),
-    });
-  } else {
-    if (item.warm) steps.push({ key: 'warm', q: 'Warm it up?', options: WARM, required: true });
-    if (item.spread) steps.push({ key: 'spread', q: 'What goes on top?', options: SPREADS, required: true });
   }
 
-  steps.push({ key: 'where', q: 'For here or to go?', options: FOR_HERE, required: true });
   steps.push({ key: 'review' });
   return steps;
 }
 
 function openBuilder(item) {
   const sel = {};
-  if (item.kind === 'drink' && item.temps.length === 1) sel.temp = TEMPS[item.temps[0]];
+  if (item.temps && item.temps.length === 1) sel.temp = TEMPS[item.temps[0]];
 
   state.builder = { item, sel, steps: buildSteps(item), idx: 0, first: true };
   play('tap');
@@ -280,10 +278,11 @@ function builderPrice(b) {
   return total;
 }
 
+/* Read the answers back in the order they were asked. */
 function builderOptionLabels(b) {
   const labels = [];
-  const order = ['temp', 'size', 'milk', 'flavor', 'sweet', 'ice', 'extras', 'warm', 'spread', 'where'];
-  for (const key of order) {
+  const keys = ['temp', ...b.steps.map((s) => s.key)];
+  for (const key of [...new Set(keys)]) {
     const v = b.sel[key];
     if (!v) continue;
     for (const o of [].concat(v)) labels.push(o.name);
@@ -408,19 +407,14 @@ function pick(step, option, btn) {
 
 function finishBuilder() {
   const b = state.builder;
-  const labels = builderOptionLabels(b);
-  const unit = builderPrice(b);
-  const sig = `${b.item.id}|${labels.join(',')}`;
-
   addToCart({
     uid: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     itemId: b.item.id,
     name: b.item.name,
     emoji: b.item.emoji,
-    opts: labels,
-    unit,
+    opts: builderOptionLabels(b),
+    unit: builderPrice(b),
     qty: 1,
-    sig,
   });
 
   play('add');
@@ -680,7 +674,7 @@ function receiptNode(order) {
     h('div', { class: 'sub' }, `${SHOP.tagline} · Order #${order.no}${order.name ? ` · ${esc(order.name)}` : ''}`),
     ...order.items.map((it) => h('div', { class: 'r-line' }, [
       h('span', {}, [
-        h('span', {}, `${it.emoji} ${it.qty} × ${it.name}`),
+        h('span', {}, `${it.emoji} ${it.qty > 1 ? `${it.qty} × ` : ''}${it.name}`),
         it.opts.length ? h('span', { class: 'opts' }, it.opts.join(' · ')) : null,
       ]),
       h('span', {}, money(it.unit * it.qty)),
@@ -746,7 +740,7 @@ function openOrders() {
       h('div', { class: 'ticket-when' }, new Date(o.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })),
     ]),
     h('div', { class: 'ticket-items' }, o.items.map((it) => h('div', {}, [
-      h('span', {}, `${it.emoji} ${it.qty} × ${it.name}`),
+      h('span', {}, `${it.emoji} ${it.qty > 1 ? `${it.qty} × ` : ''}${it.name}`),
       it.opts.length ? h('div', { class: 'o' }, it.opts.join(' · ')) : null,
     ]))),
     h('div', { class: 'ticket-foot' }, [
@@ -789,6 +783,85 @@ function toggleRow(label, hint, key, onChange) {
   ]);
 }
 
+const SAMPLE = 'One large hot chocolate with whipped cream. That is four dollars and fifty cents.';
+
+const SPEEDS = [
+  { id: 'slow', name: 'Slow', rate: 0.75 },
+  { id: 'normal', name: 'Normal', rate: 0.92 },
+  { id: 'quick', name: 'Quick', rate: 1.1 },
+];
+
+/* The device supplies the voices, and they differ a lot in how natural
+   they sound — so let a grown-up audition them and pick. */
+function voiceRow() {
+  const select = h('select', {
+    class: 'select',
+    'aria-label': 'Voice',
+    onchange: (ev) => {
+      state.settings.voice = ev.target.value || null;
+      setVoice(state.settings.voice);
+      persist();
+      say(SAMPLE);
+    },
+  });
+
+  const fill = (voices) => {
+    select.innerHTML = '';
+    if (!voices.length) {
+      select.append(h('option', { value: '' }, 'No voices on this device'));
+      select.disabled = true;
+      return;
+    }
+    select.disabled = false;
+    for (const v of voices) {
+      select.append(h('option', {
+        value: v.voiceURI,
+        selected: state.settings.voice === v.voiceURI,
+      }, `${v.name} (${v.lang})`));
+    }
+    // nothing chosen yet: show whichever one is actually in use
+    if (!state.settings.voice) select.selectedIndex = 0;
+  };
+
+  fill(englishVoices());
+  voiceUnsub?.();                     // drop the previous sheet's listener
+  voiceUnsub = onVoicesReady(fill);   // the list loads async on some devices
+
+  const speeds = h('div', { class: 'seg' }, SPEEDS.map((s) => {
+    const btn = h('button', {
+      class: 'seg-btn',
+      'aria-pressed': String(Math.abs(state.settings.rate - s.rate) < 0.02),
+      onclick: () => {
+        state.settings.rate = s.rate;
+        setRate(s.rate);
+        persist();
+        for (const other of speeds.children) other.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-pressed', 'true');
+        say(SAMPLE);
+      },
+    }, s.name);
+    return btn;
+  }));
+
+  return h('div', { class: 'set-block' }, [
+    h('div', { class: 'set-block-head' }, [
+      h('b', {}, 'Voice'),
+      h('small', {}, 'Tap a name or speed to hear it'),
+    ]),
+    select,
+    speeds,
+    h('button', {
+      class: 'ghost-btn wide',
+      onclick: () => say(SAMPLE),
+    }, '🔊 Say something'),
+    h('p', { class: 'set-note' },
+      'Only the voices installed on this device show up. On an iPad, '
+      + 'Settings → Accessibility → Spoken Content → Voices lets you download '
+      + 'better ones — the “Enhanced” and “Premium” voices sound much more human '
+      + 'than the default.'),
+  ]);
+}
+
 function openSettings() {
   play('tap');
   openSheet(sheet({
@@ -801,6 +874,7 @@ function openSettings() {
         syncSpeakChip();
         if (on) say('Reading is on');
       }),
+      voiceRow(),
       toggleRow('Sounds', 'Beeps and ka-ching', 'sound', setSound),
       toggleRow('Show prices', 'Turn off for pure pretend play', 'prices', () => {
         renderMenu();
